@@ -84,6 +84,11 @@ body {
   padding: 30px;
   background-color: rgb(190, 214, 170);
   border-radius: 10px;
+  align-content: center;
+}
+
+.hash {
+  margin-right: 20px;
 }
 
 .fail {
@@ -94,4 +99,14 @@ body {
   padding: 30px;
   background-color: rgb(201, 158, 145);
   border-radius: 10px;
+}
+
+.btn-copy {
+  width: auto;
+  border: none;
+  font-size: 24px;
+  padding: 10px 20px;
+  background-color: rgb(82, 149, 204);
+  color:#fff;
+  margin-left: 100px;
 }

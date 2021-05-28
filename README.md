@@ -21,6 +21,7 @@ You will also see any lint errors in the console.
 3. install firebase and axios dependency 
     npm i firebase
     npm i axios
+    npm i mysql
 4. start server 
     node server
 5. start client 

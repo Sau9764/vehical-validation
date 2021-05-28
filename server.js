@@ -1,60 +1,81 @@
 const express = require("express")
 const fs = require("fs");
 const app = express()
+const mysql = require('mysql')
+const md5 = require('md5');
 
 // accepting server json data
 app.use(express.json())
 
 const PORT = 4000
 
-// comes 2nd time and get direct access without login
-// app.get('/callback', authToken, (req, res) => {
-//     res.json(users.filter((user) => user.user === req.user.user))
-// })
-
-// middleware to verify the token
-// function authToken(req, res, next) {
-//     const authHeader = req.headers['authorization'] // bearer
-//     const token = authHeader && authHeader.split(' ')[1]
-//     if(token == null){
-//         res.send("Token not found")
-//     }else{
-//         jwt.verify(token, ACCESS_SECRET, (err, user) => {
-//             if(err) return res.send('Incorrect Token')
-//             req.user = user
-//             next()
-//         })
-//     }
-// }
-
-// Login route
-// app.post('/login', async (req, res) => {
-//     const user1 = users.find(user => user.user == req.body.user)
-//     if(user1 == null){
-//         res.send("Can't find user")
-//     }else{
-//         try {
-//             if(await bcrypt.compare(req.body.password, user1.password)){
-//                 const token = jwt.sign({user: req.body.user}, ACCESS_SECRET, {expiresIn: '5m'})
-//                 res.send({id_token: token})
-//             }else{
-//                 res.send('Incorrect Password')
-//             }
-//         }catch {
-//             res.send('Something went wrong')
-//         }
-//     }
-// })
-
 app.post('/write-data', async (req, res) => {
-    
 
-    var data = JSON.stringify(req.body.data);
+    var data = req.body.data;
+    var driver = []
+
+    for (x in data) {
+        driver.push(data[x])
+    }
+
+    var key = data['mobile'] + data['aadhar'] + data['vehical'];
+    var hash = md5(key);
+
+    console.log("key " + hash)
+
+    // connecting to mysql
+    var con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "driver_validation"
+    });
     
-    fs.appendFile("data.json", data, (err) => {
-      if (err) console.log(err);
-      console.log("Successfully Written to File.");
-      res.send('written')
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected for insertion!");
+        let query = `INSERT INTO drivers (name, mobile, email, aadhar, vehical_number, aadhar_path, vehical_path) VALUES (?, ?, ?, ?, ?, ?, ?);`;
+        con.query(query, driver, function (err, rows) {
+          if (err) throw err;
+          console.log("Row inserted with id = " + rows.insertId);
+        //   console.log(hash)
+          res.send({hash: hash})
+        });
+    });
+
+})
+
+app.get('/validate-driver/:name/:hash', async (req, res) => {
+
+    var hash = req.params.hash
+    var name = req.params.name
+    
+    // retriving data
+    var con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "driver_validation"
+    });
+    
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected for retriving");
+        let query = `SELECT name, mobile, aadhar, vehical_number FROM drivers where name = ?`;
+        con.query(query, name, function (err, result) {
+          if (err) throw err;
+
+          var key = result[0].mobile + result[0].aadhar + result[0].vehical_number
+          var created_hash = md5(key);
+
+          console.log("key " + created_hash)
+
+          if(hash == created_hash){
+            res.send('Success')
+          }else{
+            res.send('Fail')
+          }
+        });
     });
 })
 
