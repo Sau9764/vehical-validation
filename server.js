@@ -38,7 +38,6 @@ app.post('/write-data', async (req, res) => {
         con.query(query, driver, function (err, rows) {
           if (err) throw err;
           console.log("Row inserted with id = " + rows.insertId);
-        //   console.log(hash)
           res.send({hash: hash})
         });
     });

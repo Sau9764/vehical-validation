@@ -22,6 +22,7 @@ You will also see any lint errors in the console.
     npm i firebase
     npm i axios
     npm i mysql
+    npm i copy-to-clipboard
 4. start server 
     node server
 5. start client 
