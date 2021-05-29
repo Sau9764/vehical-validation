@@ -18,14 +18,9 @@ You will also see any lint errors in the console.
 
 1. Clone the project
 2. run npm install 
-3. install firebase and axios dependency 
-    npm i firebase
-    npm i axios
-    npm i mysql
-    npm i copy-to-clipboard
-4. start server 
+3. start server 
     node server
-5. start client 
+4. start client 
     npm start
-6. if in browser console after submitting gives error of http://, then open cmd in administrator. and paste the following command. It will open new chrome instance which allows http request.
+5. if in browser console after submitting gives error of http://, then open cmd in administrator. and paste the following command. It will open new chrome instance which allows http request.
     "C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir=~/chromeTemp

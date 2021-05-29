@@ -108,7 +108,6 @@ function App() {
           <input type="submit" className="btn" ></input>
           
         </form>}
-        
         {!success && !fail && !otp && <div id='recaptcha'></div>}
         {/* {otp && !success && !fail && <form onSubmit={(e) => submitOtp(e)} method="post">
           <label>Enter OTP Here: </label>

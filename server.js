@@ -18,7 +18,7 @@ app.post('/write-data', async (req, res) => {
         driver.push(data[x])
     }
 
-    var key = data['mobile'] + data['aadhar'] + data['vehical'];
+    var key = data['name'] + data['mobile'] + data['vehical'];
     var hash = md5(key);
 
     console.log("key " + hash)
@@ -60,11 +60,11 @@ app.get('/validate-driver/:name/:hash', async (req, res) => {
     con.connect(function(err) {
         if (err) throw err;
         console.log("Connected for retriving");
-        let query = `SELECT name, mobile, aadhar, vehical_number FROM drivers where name = ?`;
+        let query = `SELECT name, mobile, vehical_number FROM drivers where name = ?`;
         con.query(query, name, function (err, result) {
           if (err) throw err;
 
-          var key = result[0].mobile + result[0].aadhar + result[0].vehical_number
+          var key = result[0].name + result[0].mobile + result[0].vehical_number
           var created_hash = md5(key);
 
           console.log("key " + created_hash)
